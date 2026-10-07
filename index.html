@@ -1,110 +1,165 @@
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "BusinessBrainProfile",
-  "type": "object",
-  "required": [
-    "business_name",
-    "category",
-    "location",
-    "value_proposition",
-    "target_audiences",
-    "core_products_or_services",
-    "brand_voice",
-    "unique_selling_points",
-    "customer_objections",
-    "social_proof",
-    "calls_to_action"
-  ],
-  "properties": {
-    "business_name": {
-      "type": "string",
-      "description": "The exact commercial name of the business (e.g., 'Dory Fish Restaurant')."
-    },
-    "category": {
-      "type": "string",
-      "description": "Specific industry niche (e.g., 'Seafood Restaurant', 'Barbershop', 'Boutique Hotel')."
-    },
-    "location": {
-      "type": "object",
-      "required": ["city_neighborhood", "full_address_or_area"],
-      "properties": {
-        "city_neighborhood": {
-          "type": "string",
-          "description": "City and neighborhood (e.g., 'Kolonos, Athens')."
-        },
-        "full_address_or_area": {
-          "type": "string",
-          "description": "Full street address or general operating area. Return null if not found on page."
-        }
-      }
-    },
-    "value_proposition": {
-      "type": "string",
-      "description": "1-2 sentence core message of what makes this business valuable to local customers."
-    },
-    "target_audiences": {
-      "type": "array",
-      "description": "3-4 specific local customer segments.",
-      "items": { "type": "string" }
-    },
-    "core_products_or_services": {
-      "type": "array",
-      "description": "List of core items, menu offerings, or main services extracted from the page.",
-      "items": {
-        "type": "object",
-        "required": ["name", "description"],
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "is_highlight": { 
-            "type": "boolean", 
-            "description": "Set true if highlighted as a best-seller, house special, or signature service."
-          }
-        }
-      }
-    },
-    "brand_voice": {
-      "type": "object",
-      "required": ["tone_traits", "language", "communication_style"],
-      "properties": {
-        "tone_traits": {
-          "type": "array",
-          "description": "3-5 adjectives describing the voice (e.g., ['Friendly', 'Fresh', 'Premium but accessible']).",
-          "items": { "type": "string" }
-        },
-        "language": {
-          "type": "string",
-          "description": "Primary language of the website (e.g., 'Greek', 'English')."
-        },
-        "communication_style": {
-          "type": "string",
-          "description": "Brief instruction for content generation (e.g., 'Casual local community feel with emphasis on quality ingredients')."
-        }
-      }
-    },
-    "unique_selling_points": {
-      "type": "array",
-      "description": "Key benefits that separate them from local competitors.",
-      "items": { "type": "string" }
-    },
-    "customer_objections": {
-      "type": "array",
-      "description": "Common customer hesitations or doubts this business actively refutes (e.g., 'Expensive seafood', 'Hard to park').",
-      "items": { "type": "string" }
-    },
-    "social_proof": {
-      "type": "array",
-      "description": "Awards, ratings, customer quotes, or years in business mentioned on the page.",
-      "items": { "type": "string" }
-    },
-    "calls_to_action": {
-      "type": "object",
-      "required": ["primary_cta", "secondary_cta"],
-      "properties": {
-        "primary_cta": { "type": "string", "description": "e.g., 'Order Online via e-Food', 'Book Appointment'" },
-        "secondary_cta": { "type": "string", "description": "e.g., 'Call Us', 'Visit us in Kolonos'" },
-        "contact_phone": { "type": "string" }
-      }
-    }
-  }
-}
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapToPost Demo - Η Γεύση</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body { background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-2 sm:p-6 text-slate-100">
+
+    <!-- Mobile Device Frame -->
+    <div class="relative w-full max-w-[390px] h-[812px] bg-slate-900 rounded-[48px] border-[8px] border-slate-700 shadow-2xl overflow-hidden flex flex-col">
+        
+        <!-- Status Bar -->
+        <div class="w-full bg-slate-900 px-6 pt-3 pb-2 flex justify-between items-center text-xs text-slate-400 z-20">
+            <span>19:42</span>
+            <div class="w-20 h-4 bg-black rounded-full absolute left-1/2 transform -translate-x-1/2 top-2"></div>
+            <div class="flex space-x-1.5 items-center">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full text-green-400"></i>
+            </div>
+        </div>
+
+        <!-- Top App Bar -->
+        <div class="bg-slate-900/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-slate-800 z-10">
+            <div class="flex items-center space-x-2">
+                <span class="bg-amber-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded">DEMO</span>
+                <span class="text-xs text-slate-400 font-mono">gefsi.snaptopost.com</span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button class="text-amber-400 text-sm font-semibold hover:underline">Είσοδος</button>
+            </div>
+        </div>
+
+        <!-- Scrollable Screen Content -->
+        <div class="flex-1 overflow-y-auto no-scrollbar pb-24">
+            
+            <!-- Store Hero Banner -->
+            <div class="relative h-44 bg-slate-800 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80');">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+                    <div>
+                        <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Οβεληστήριο</span>
+                        <h1 class="text-2xl font-black text-white leading-tight mt-1">Η ΓΕΥΣΗ</h1>
+                        <p class="text-xs text-slate-300"><i class="fa-solid fa-location-dot text-amber-400 mr-1"></i> Φλέμινγκ 5, Νέα Ιωνία / Λαμία</p>
+                    </div>
+                    <div class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span> Ανοιχτό
+                    </div>
+                </div>
+            </div>
+
+            <!-- SnapToPost AI Social Blitz Preview Card -->
+            <div class="m-3 p-3.5 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-red-500/10 border border-amber-500/30 rounded-2xl">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-amber-400 flex items-center gap-1">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> SnapToPost AI Generator
+                    </span>
+                    <span class="text-[10px] bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded-full">3 Έτοιμα Posts</span>
+                </div>
+                <p class="text-xs text-slate-200 font-medium italic mb-2.5">
+                    "🔥 Σουβλάκια & Μερίδες που ξεχωρίζουν στη Νέα Ιωνία! Παράγγειλε online με 1 click. #Gefsi #Souvlaki"
+                </p>
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-1.5 rounded-lg text-xs text-center flex items-center justify-center gap-1">
+                        <i class="fa-brands fa-instagram text-sm"></i> Δημοσίευση
+                    </button>
+                    <button class="px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu Categories Slider -->
+            <div class="px-3 py-2 flex space-x-2 overflow-x-auto no-scrollbar border-b border-slate-800">
+                <button class="bg-amber-500 text-slate-950 font-bold px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap">🔥 Προσφορές</button>
+                <button class="bg-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap">Πίτες & Τυλιχτά</button>
+                <button class="bg-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap">Burgers & XL</button>
+                <button class="bg-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap">Μερίδες</button>
+            </div>
+
+            <!-- Menu Items List -->
+            <div class="p-3 space-y-3">
+
+                <!-- Combo Offer Card -->
+                <div class="p-3 bg-slate-800/80 border border-slate-700/60 rounded-xl flex gap-3 items-center">
+                    <img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=200&q=80" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" alt="Grill Feast">
+                    <div class="flex-1">
+                        <span class="text-[10px] bg-red-500/20 text-red-400 font-bold px-1.5 py-0.5 rounded">-11% OFFER</span>
+                        <h3 class="text-sm font-bold text-white mt-0.5">Grill Feast Combo</h3>
+                        <p class="text-[11px] text-slate-400 line-clamp-2">3 Σουβλάκια κοτόπουλο/χοιρινό, 1 πατάτες & 2 ζυμαράκια.</p>
+                        <div class="mt-1.5 flex justify-between items-center">
+                            <span class="text-amber-400 font-extrabold text-sm">10,90 €</span>
+                            <button class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-3 py-1 rounded-lg text-xs font-bold">+ Προσθήκη</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2: Old School Pita -->
+                <div class="p-3 bg-slate-800/80 border border-slate-700/60 rounded-xl flex gap-3 items-center">
+                    <img src="https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=200&q=80" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" alt="Old School Pita">
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-white">Old School Πίτα Σουβλάκι</h3>
+                        <p class="text-[11px] text-slate-400 line-clamp-1">Χοιρινό ή κοτόπουλο με παραδοσιακά υλικά.</p>
+                        <div class="mt-1.5 flex justify-between items-center">
+                            <span class="text-amber-400 font-extrabold text-sm">3,20 €</span>
+                            <button class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1 rounded-lg text-xs font-bold">+ Προσθήκη</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3: XL Burger -->
+                <div class="p-3 bg-slate-800/80 border border-slate-700/60 rounded-xl flex gap-3 items-center">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=200&q=80" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" alt="XL Burger">
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-white">XL Burger "Γεύση"</h3>
+                        <p class="text-[11px] text-slate-400 line-clamp-2">2πλό μπιφτέκι, 2πλό cheddar, 2πλό μπέικον, αυγό, BBQ sauce.</p>
+                        <div class="mt-1.5 flex justify-between items-center">
+                            <span class="text-amber-400 font-extrabold text-sm">9,00 €</span>
+                            <button class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1 rounded-lg text-xs font-bold">+ Προσθήκη</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4: Mega Bowl -->
+                <div class="p-3 bg-slate-800/80 border border-slate-700/60 rounded-xl flex gap-3 items-center">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=200&q=80" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" alt="Mega Bowl">
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-white">Mega Bowl Γύρος Χοιρινός</h3>
+                        <p class="text-[11px] text-slate-400 line-clamp-1">Με iceberg, πατάτες, 1 πίτα & Caesar's dressing.</p>
+                        <div class="mt-1.5 flex justify-between items-center">
+                            <span class="text-amber-400 font-extrabold text-sm">6,00 €</span>
+                            <button class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1 rounded-lg text-xs font-bold">+ Προσθήκη</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Floating Cart Bar -->
+        <div class="absolute bottom-4 left-4 right-4 bg-amber-500 text-slate-950 rounded-2xl p-3 flex justify-between items-center shadow-xl border border-amber-300/40">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-slate-950 text-amber-400 rounded-xl flex items-center justify-center font-bold text-xs">1</div>
+                <div>
+                    <p class="text-xs font-extrabold">Grill Feast Combo</p>
+                    <p class="text-[10px] opacity-80">10,90 € • 0% Προμήθεια</p>
+                </div>
+            </div>
+            <button class="bg-slate-950 text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1">
+                Παραγγελία <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>
