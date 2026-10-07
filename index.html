@@ -1,399 +1,110 @@
-<!DOCTYPE html>
-<html lang="el">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dory Fresh Seafood - Ψητοπωλείο / Ιχθυοπωλείο</title>
-    <style>
-        :root {
-            --dory-blue: #004d80;
-            --dory-cyan: #00a4e4;
-            --dory-gold: #fcca03;
-            --bg-light: #eff3f7;
-            --card-white: #ffffff;
-            --text-dark: #0f172a;
-            --text-muted: #64748b;
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BusinessBrainProfile",
+  "type": "object",
+  "required": [
+    "business_name",
+    "category",
+    "location",
+    "value_proposition",
+    "target_audiences",
+    "core_products_or_services",
+    "brand_voice",
+    "unique_selling_points",
+    "customer_objections",
+    "social_proof",
+    "calls_to_action"
+  ],
+  "properties": {
+    "business_name": {
+      "type": "string",
+      "description": "The exact commercial name of the business (e.g., 'Dory Fish Restaurant')."
+    },
+    "category": {
+      "type": "string",
+      "description": "Specific industry niche (e.g., 'Seafood Restaurant', 'Barbershop', 'Boutique Hotel')."
+    },
+    "location": {
+      "type": "object",
+      "required": ["city_neighborhood", "full_address_or_area"],
+      "properties": {
+        "city_neighborhood": {
+          "type": "string",
+          "description": "City and neighborhood (e.g., 'Kolonos, Athens')."
+        },
+        "full_address_or_area": {
+          "type": "string",
+          "description": "Full street address or general operating area. Return null if not found on page."
         }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(180deg, #e2e8f0 0%, var(--bg-light) 100%);
-            color: var(--text-dark);
-            box-sizing: border-box;
-            padding-bottom: 120px;
-            min-height: 100vh;
+      }
+    },
+    "value_proposition": {
+      "type": "string",
+      "description": "1-2 sentence core message of what makes this business valuable to local customers."
+    },
+    "target_audiences": {
+      "type": "array",
+      "description": "3-4 specific local customer segments.",
+      "items": { "type": "string" }
+    },
+    "core_products_or_services": {
+      "type": "array",
+      "description": "List of core items, menu offerings, or main services extracted from the page.",
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "is_highlight": { 
+            "type": "boolean", 
+            "description": "Set true if highlighted as a best-seller, house special, or signature service."
+          }
         }
-
-        /* Upgraded Responsive Header Framework */
-        header {
-            background: linear-gradient(135deg, var(--dory-blue) 0%, #002d4d 100%);
-            color: white;
-            padding: 35px 20px;
-            text-align: center;
-            border-bottom-left-radius: 28px;
-            border-bottom-right-radius: 28px;
-            box-shadow: 0 10px 25px rgba(0, 77, 128, 0.15);
-            display: block !important;
-            visibility: visible !important;
-            min-height: 80px;
+      }
+    },
+    "brand_voice": {
+      "type": "object",
+      "required": ["tone_traits", "language", "communication_style"],
+      "properties": {
+        "tone_traits": {
+          "type": "array",
+          "description": "3-5 adjectives describing the voice (e.g., ['Friendly', 'Fresh', 'Premium but accessible']).",
+          "items": { "type": "string" }
+        },
+        "language": {
+          "type": "string",
+          "description": "Primary language of the website (e.g., 'Greek', 'English')."
+        },
+        "communication_style": {
+          "type": "string",
+          "description": "Brief instruction for content generation (e.g., 'Casual local community feel with emphasis on quality ingredients')."
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            color: #ffffff !important;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .header-info {
-            font-size: 13px;
-            color: #f1f5f9;
-            margin-top: 10px;
-            font-weight: 500;
-            line-height: 1.5;
-            letter-spacing: 0.3px;
-        }
-
-        /* Centralized Desktop App Wrapper Container */
-        .container {
-            max-width: 650px;
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 32px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.03);
-            box-sizing: border-box;
-        }
-
-        .category-container {
-            margin: 5px 0 25px 0;
-        }
-        
-        .category-title {
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: var(--dory-blue);
-            letter-spacing: 1.5px;
-            text-align: left;
-            margin-bottom: 10px;
-            padding-left: 5px;
-        }
-
-        .category-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 4px 4px 12px 4px;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-        .category-scroll::-webkit-scrollbar { display: none; }
-
-        .cat-pill {
-            background: var(--card-white);
-            color: var(--text-dark);
-            border: 1px solid rgba(0, 77, 128, 0.1);
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 13px;
-            font-weight: 700;
-            white-space: nowrap;
-            cursor: pointer;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.02);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .cat-pill:hover {
-            transform: translateY(-1px);
-            border-color: var(--dory-cyan);
-        }
-
-        .cat-pill.active {
-            background: var(--dory-blue);
-            color: white;
-            border-color: var(--dory-blue);
-            box-shadow: 0 6px 16px rgba(0, 77, 128, 0.25);
-        }
-
-        .menu-item {
-            background: var(--card-white);
-            border-radius: 22px;
-            padding: 20px;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(0, 0, 0, 0.01);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.02);
-            box-sizing: border-box;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .menu-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,77,128,0.06);
-        }
-
-        .item-info {
-            text-align: left;
-            padding-right: 15px;
-            flex: 1;
-        }
-
-        .item-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .item-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        .item-action-zone {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .item-price {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--dory-blue);
-            white-space: nowrap;
-        }
-
-        .add-btn {
-            background-color: rgba(0, 77, 128, 0.05);
-            color: var(--dory-blue);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 22px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .add-btn:hover {
-            background-color: var(--dory-blue);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        /* Premium Sticky Footer Assembly Container */
-        #cart-bar {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 610px;
-            background: linear-gradient(90deg, var(--dory-blue) 0%, #003356 100%);
-            color: white;
-            padding: 18px 25px;
-            border-radius: 24px;
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 15px 35px rgba(0, 77, 128, 0.35);
-            box-sizing: border-box;
-            z-index: 100;
-            animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes popUp {
-            from { opacity: 0; transform: translate(-50%, 40px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
-
-        .cart-summary { text-align: left; }
-        .cart-count { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--dory-cyan); letter-spacing: 0.8px; }
-        .cart-total { font-size: 24px; font-weight: 800; margin-top: 1px; }
-
-        .order-btn {
-            background-color: var(--dory-gold);
-            color: #05050a;
-            text-decoration: none;
-            padding: 14px 24px;
-            font-size: 14px;
-            font-weight: 800;
-            border-radius: 14px;
-            box-shadow: 0 5px 15px rgba(252, 202, 3, 0.35);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: transform 0.2s ease;
-        }
-        .order-btn:hover { transform: scale(1.02); }
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>DORY FRESH SEAFOOD</h1>
-    <div class="header-info">📍 Λένορμαν 130-132, Κολωνός<br>📞 211 4181 460 | 🕒 08:00 - 18:00 (Δευτέρα Κλειστά)</div>
-</header>
-
-<div class="container">
-    <div class="category-container">
-        <div class="category-title">Κατηγορίες Μενού</div>
-        <div class="category-scroll">
-            <div class="cat-pill active" onclick="filterMenu('all', this)">🍽️ Όλα τα Πιάτα</div>
-            <div class="cat-pill" onclick="filterMenu('orek', this)">🧆 Ορεκτικά</div>
-            <div class="cat-pill" onclick="filterMenu('psaria', this)">🐟 Ψητά Ψάρια</div>
-            <div class="cat-pill" onclick="filterMenu('chips', this)">🍟 Fish &amp; Chips</div>
-            <div class="cat-pill" onclick="filterMenu('pasta', this)">🍝 Ζυμαρικά</div>
-        </div>
-    </div>
-
-    <div id="menu-wrapper">
-        <!-- Ορεκτικά -->
-        <div class="menu-item" data-cat="orek">
-            <div class="item-info">
-                <div class="item-title"><span>🍋</span> Γαρίδες Σαγανάκι</div>
-                <div class="item-desc">Με φέτα &amp; φρέσκια κόκκινη σάλτσα</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">12,00€</span>
-                <button class="add-btn" onclick="addToCart('Γαρίδες Σαγανάκι', 12.00)">+</button>
-            </div>
-        </div>
-
-        <div class="menu-item" data-cat="orek">
-            <div class="item-info">
-                <div class="item-title"><span>🥣</span> Ταραμοσαλάτα</div>
-                <div class="item-desc">Σπιτική παραδοσιακή συνταγή</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">5,00€</span>
-                <button class="add-btn" onclick="addToCart('Ταραμοσαλάτα', 5.00)">+</button>
-            </div>
-        </div>
-
-        <!-- Ψητά Ψάρια -->
-        <div class="menu-item" data-cat="psaria">
-            <div class="item-info">
-                <div class="item-title"><span>🔥</span> Τσιπούρα Παντρεμένη</div>
-                <div class="item-desc">Με φρέσκια ντομάτα, κρεμμύδι, μαϊντανό &amp; γαρνιτούρα</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">13,50€</span>
-                <button class="add-btn" onclick="addToCart('Τσιπούρα Παντρεμένη', 13.50)">+</button>
-            </div>
-        </div>
-
-        <div class="menu-item" data-cat="psaria">
-            <div class="item-info">
-                <div class="item-title"><span>🌿</span> Λαβράκι Ψητό</div>
-                <div class="item-desc">Φρέσκο λαβράκι σχάρας 500-600γρ</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">11,00€</span>
-                <button class="add-btn" onclick="addToCart('Λαβράκι Ψητό', 11.00)">+</button>
-            </div>
-        </div>
-        <!-- Fish & Chips / Burger -->
-        <div class="menu-item" data-cat="chips">
-            <div class="item-info">
-                <div class="item-title"><span>🍔</span> Fish Burger</div>
-                <div class="item-desc">Iceberg, ντομάτα, σως DORY και τηγανητές πατάτες</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">10,00€</span>
-                <button class="add-btn" onclick="addToCart('Fish Burger', 10.00)">+</button>
-            </div>
-        </div>
-
-        <div class="menu-item" data-cat="chips">
-            <div class="item-info">
-                <div class="item-title"><span>🍟</span> Fish &amp; Chips</div>
-                <div class="item-desc">Μπακαλιάρος πανέ με πατάτες τηγανητές &amp; σως DORY</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">10,00€</span>
-                <button class="add-btn" onclick="addToCart('Fish &amp; Chips', 10.00)">+</button>
-            </div>
-        </div>
-
-        <!-- Ζυμαρικά -->
-        <div class="menu-item" data-cat="pasta">
-            <div class="item-info">
-                <div class="item-title"><span>⚓</span> Μακαρονάδα του Ψαρά</div>
-                <div class="item-desc">Με γαρίδες, καλαμαράκι, μύδια &amp; κόκκινη σάλτσα</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">12,00€</span>
-                <button class="add-btn" onclick="addToCart('Μακαρονάδα του Ψαρά', 12.00)">+</button>
-            </div>
-        </div>
-
-        <div class="menu-item" data-cat="pasta">
-            <div class="item-info">
-                <div class="item-title"><span>👑</span> Αστακομακαρονάδα</div>
-                <div class="item-desc">Κατόπιν παραγγελίας (Φρέσκος αστακός)</div>
-            </div>
-            <div class="item-action-zone">
-                <span class="item-price">35,00€</span>
-                <button class="add-btn" onclick="addToCart('Αστακομακαρονάδα', 35.00)">+</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="cart-bar">
-    <div class="cart-summary">
-        <div id="cart-count-text" class="cart-count">0 ΠΡΟΪΟΝΤΑ</div>
-        <div id="cart-total-text" class="cart-total">0,00€</div>
-    </div>
-    <a href="tel:2114181460" class="order-btn">📞 ΠΑΡΑΓΓΕΛΙΑ</a>
-</div>
-
-<script>
-    let itemCount = 0;
-    let totalPrice = 0.00;
-
-    function filterMenu(category, pillElement) {
-        document.querySelectorAll('.cat-pill').forEach(pill => pill.classList.remove('active'));
-        pillElement.classList.add('active');
-
-        const items = document.querySelectorAll('.menu-item');
-        items.forEach(item => {
-            if (category === 'all' || item.getAttribute('data-cat') === category) {
-                item.style.display = 'flex';
-            } else {
-                item.style.display = 'none';
-            }
-        });
+      }
+    },
+    "unique_selling_points": {
+      "type": "array",
+      "description": "Key benefits that separate them from local competitors.",
+      "items": { "type": "string" }
+    },
+    "customer_objections": {
+      "type": "array",
+      "description": "Common customer hesitations or doubts this business actively refutes (e.g., 'Expensive seafood', 'Hard to park').",
+      "items": { "type": "string" }
+    },
+    "social_proof": {
+      "type": "array",
+      "description": "Awards, ratings, customer quotes, or years in business mentioned on the page.",
+      "items": { "type": "string" }
+    },
+    "calls_to_action": {
+      "type": "object",
+      "required": ["primary_cta", "secondary_cta"],
+      "properties": {
+        "primary_cta": { "type": "string", "description": "e.g., 'Order Online via e-Food', 'Book Appointment'" },
+        "secondary_cta": { "type": "string", "description": "e.g., 'Call Us', 'Visit us in Kolonos'" },
+        "contact_phone": { "type": "string" }
+      }
     }
-
-    function addToCart(name, price) {
-        itemCount++;
-        totalPrice += price;
-
-        document.getElementById('cart-count-text').innerText = `${itemCount} ΠΡΟΪΟΝΤΑ`;
-        document.getElementById('cart-total-text').innerText = `${totalPrice.toFixed(2).replace('.', ',')}€`;
-        
-        if (itemCount > 0) {
-            document.getElementById('cart-bar').style.display = 'flex';
-        }
-    }
-</script>
-</body>
-</html>
+  }
+}
