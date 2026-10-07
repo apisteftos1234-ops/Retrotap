@@ -1,259 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poker Outs & Equity Solver - Klaudigal Studios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dory Fresh Seafood - Μενού &amp; Παραγγελίες</title>
     <style>
         :root {
-            --bg-color: #050508;
-            --card-bg: rgba(20, 20, 35, 0.45);
-            --neon-pink: #ff0055;
-            --neon-cyan: #00f3ff;
-            --text-main: #f0f0f5;
-            --text-muted: #8fa0a6;
+            --dory-blue: #004d80;
+            --dory-cyan: #00a4e4;
+            --dory-gold: #fcca03;
+            --bg-light: #f7f9fb;
+            --card-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
         }
 
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: radial-gradient(circle at 50% 30%, #150d2a 0%, var(--bg-color) 70%);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
             box-sizing: border-box;
+            padding-bottom: 90px; /* Space for fixed bottom checkout cart */
         }
 
-        #calc-container {
-            max-width: 440px;
-            width: 100%;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 30px;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 0, 85, 0.25);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 
-                        0 0 30px rgba(255, 0, 85, 0.05),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        #calc-container:hover {
-            border-color: rgba(255, 0, 85, 0.45);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
-                        0 0 40px rgba(255, 0, 85, 0.15);
-        }
-
-        h2 {
-            font-size: 26px;
-            margin: 0 0 10px 0;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #ffffff 30%, var(--text-muted) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin: 0 0 25px 0;
-            line-height: 1.5;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
-            color: var(--neon-pink);
-            text-shadow: 0 0 8px rgba(255, 0, 85, 0.2);
-        }
-
-        select {
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            border-radius: 12px;
-            border: 1px solid rgba(143, 160, 166, 0.2);
-            background: rgba(10, 10, 20, 0.8);
-            color: var(--text-main);
-            outline: none;
-            box-sizing: border-box;
-            cursor: pointer;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238fa0a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 16px;
-        }
-
-        select:focus {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 12px rgba(255, 0, 85, 0.15);
-        }
-
-        .btn {
-            background: linear-gradient(90deg, var(--neon-pink) 0%, #d60044 100%);
+        header {
+            background: linear-gradient(135deg, var(--dory-blue) 0%, #002d4d 100%);
             color: white;
-            border: none;
-            padding: 15px;
-            font-size: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 4px 15px rgba(0, 77, 128, 0.15);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 800;
             letter-spacing: 1px;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease, opacity 0.2s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.45);
+        .header-info {
+            font-size: 13px;
+            color: var(--dory-cyan);
+            margin-top: 6px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 10px rgba(255, 0, 85, 0.3);
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 15px;
         }
 
-        #result-box {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(5, 5, 10, 0.6);
+        /* Category Filter Row Layout */
+        .category-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            margin-bottom: 15px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-pill {
+            background: var(--card-white);
+            color: var(--text-dark);
+            border: 1px solid rgba(0, 77, 128, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+
+        .cat-pill.active {
+            background: var(--dory-blue);
+            color: white;
+            border-color: var(--dory-blue);
+            box-shadow: 0 4px 10px rgba(0, 77, 128, 0.2);
+        }
+
+        /* Menu Grid List Items cards */
+        .menu-item {
+            background: var(--card-white);
             border-radius: 16px;
-            border: 1px solid rgba(0, 243, 255, 0.15);
-            font-size: 15px;
-            line-height: 1.8;
-            display: none;
-            text-align: left;
-            animation: fadeIn 0.4s ease-out forwards;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-item {
+            padding: 16px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 6px 0;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease;
         }
 
-        .result-item:last-child {
-            border-bottom: none;
-            padding-top: 10px;
-            margin-top: 4px;
+        .menu-item:active { transform: scale(0.98); }
+
+        .item-info {
+            text-align: left;
+            padding-right: 15px;
         }
 
-        .label-text {
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .highlight {
-            color: var(--neon-cyan);
+        .item-title {
+            font-size: 16px;
             font-weight: 700;
-            font-family: monospace;
-            font-size: 18px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            color: var(--text-dark);
+            margin-bottom: 4px;
         }
 
-        .highlight-large {
-            color: #39ff14;
+        .item-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .item-price {
+            font-size: 16px;
             font-weight: 800;
-            font-family: monospace;
-            font-size: 24px;
-            text-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
+            color: var(--dory-blue);
+            white-space: nowrap;
+        }
+
+        .add-btn {
+            background-color: rgba(0, 77, 128, 0.06);
+            color: var(--dory-blue);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:active {
+            background-color: var(--dory-blue);
+            color: white;
+        }
+
+        /* Fixed Bottom Cart Basket Tray Panel */
+        #cart-bar {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 30px);
+            max-width: 470px;
+            background: var(--dory-blue);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 18px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0, 77, 128, 0.3);
+            box-sizing: border-box;
+            z-index: 100;
+            animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popUp {
+            from { opacity: 0; transform: translate(-50%, 40px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .cart-summary { text-align: left; }
+        .cart-count { font-size: 12px; text-transform: uppercase; font-weight: 700; color: var(--dory-cyan); }
+        .cart-total { font-size: 20px; font-weight: 800; }
+
+        .order-btn {
+            background-color: var(--dory-gold);
+            color: #000000;
+            text-decoration: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 800;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(252, 202, 3, 0.3);
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-<div id="calc-container">
-    <h2>🃏 Poker Outs &amp; Equity Solver</h2>
-    <p class="subtitle">Select your active draw on the flop to instantly calculate your outs and win equity by the turn and river.</p>
-    
-    <div class="input-group">
-        <label for="draw-type">Select Your Hand Draw</label>
-        <select id="draw-type">
-            <option value="4">Gutshot Straight Draw (4 Outs)</option>
-            <option value="8">Open-Ended Straight Draw (8 Outs)</option>
-            <option value="9">Flush Draw (9 Outs)</option>
-            <option value="12">Flush + Gutshot Draw (12 Outs)</option>
-            <option value="15">Flush + Open-Ended Draw (15 Outs)</option>
-            <option value="6">Overcards Only (6 Outs)</option>
-        </select>
+<header>
+    <h1>DORY FRESH SEAFOOD</h1>
+    <div class="header-info">📍 Λένορμαν 130-132, Κολωνός | 🕒 08:00 - 18:00</div>
+</header>
+
+<div class="container">
+    <!-- Category Navigation Scroll -->
+    <div class="category-scroll">
+        <div class="cat-pill active" onclick="filterMenu('all', this)">Όλα τα Πιάτα</div>
+        <div class="cat-pill" onclick="filterMenu('orek', this)">Ορεκτικά</div>
+        <div class="cat-pill" onclick="filterMenu('psaria', this)">Ψητά Ψάρια</div>
+        <div class="cat-pill" onclick="filterMenu('chips', this)">Fish &amp; Chips</div>
+        <div class="cat-pill" onclick="filterMenu('pasta', this)">Ζυμαρικά</div>
     </div>
 
-    <div class="input-group">
-        <label for="street">Current Street</label>
-        <select id="street">
-            <option value="flop">On the Flop (2 cards to come)</option>
-            <option value="turn">On the Turn (1 card to come)</option>
-        </select>
-    </div>
-    
-    <button class="btn" onclick="calculateEquity()">SOLVE HAND EQUITY</button>
-    
-    <div id="result-box">
-        <div class="result-item">
-            <span class="label-text">Unseen Cards Left:</span>
-            <span id="cards-left" class="highlight">47</span>
+    <!-- Live Menu Items Container Grid -->
+    <div id="menu-wrapper">
+        <!-- Appetizers Category -->
+        <div class="menu-item" data-cat="orek">
+            <div class="item-info">
+                <div class="item-title">Γαρίδες Σαγανάκι</div>
+                <div class="item-desc">Με φέτα &amp; φρέσκια κόκκινη σάλτσα</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <span class="item-price">12,00€</span>
+                <button class="add-btn" onclick="addToCart('Γαρίδες Σαγανάκι', 12.00)">+</button>
+            </div>
         </div>
-        <div class="result-item">
-            <span class="label-text">Exact Win Outs:</span>
-            <span id="outs-output" class="highlight">0</span>
+
+        <div class="menu-item" data-cat="orek">
+            <div class="item-info">
+                <div class="item-title">Ταραμοσαλάτα</div>
+                <div class="item-desc">Σπιτική παραδοσιακή συνταγή</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <span class="item-price">5,00€</span>
+                <button class="add-btn" onclick="addToCart('Ταραμοσαλάτα', 5.00)">+</button>
+            </div>
         </div>
-        <div class="result-item">
-            <span class="label-text">Mathematical Equity:</span>
-            <span id="equity-output" class="highlight-large">0.00%</span>
+
+        <!-- Mains / Grilled Fish Category -->
+        <div class="menu-item" data-cat="psaria">
+            <div class="item-info">
+                <div class="item-title">Τσιπούρα Παντρεμένη</div>
+                <div class="item-desc">Με φρέσκια ντομάτα, κρεμμύδι, μαϊντανό &amp; γαρνιτούρα</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <span class="item-price">13,50€</span>
+                <button class="add-btn" onclick="addToCart('Τσιπούρα Παντρεμένη', 13.50)">+</button>
+            </div>
         </div>
-    </div>
-</div>
 
-<script>
-    function calculateEquity() {
-        let outs = parseInt(document.getElementById('draw-type').value);
-        const street = document.getElementById('street').value;
-        
-        let totalCards = (street === 'flop') ? 47 : 46;
-        let equity = 0;
+        <div class="menu-item" data-cat="psaria">
+            <div class="item-info">
+                <div class="item-title">Λαβράκι Ψητό</div>
+                <div class="item-desc">Φρέσκο λαβράκι σχάρας 500-600γρ</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <span class="item-price">11,00€</span>
+                <button class="add-btn" onclick="addToCart('Λαβράκι Ψητό', 11.00)">+</button>
+            </div>
+        </div>
 
-        if (street === 'flop') {
-            let missTurnProb = (totalCards - outs) / totalCards;
-            let missRiverProb = (totalCards - 1 - outs) / (totalCards - 1);
-            equity = (1 - (missTurnProb * missRiverProb)) * 100;
-        } else {
-            equity = (outs / totalCards) * 100;
-        }
+        <!-- Fast Casual Categories -->
+        <div class="menu-item" data-cat="chips">
+            <div class="item-info">
+                <div class="item-title">Fish Burger</div>
+                <div class="item-desc">Iceberg, ντομάτα, σως DORY και τηγανητές πατάτες</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <span class="item-price">10,00€</span>
+                <button class="add-btn" onclick="addToCart('Fish Burger', 10.00)">+</button>
+            </div>
+        </div>
 
-        document.getElementById('cards-left').innerText = totalCards;
-        document.getElementById('outs-output').innerText = outs;
-        document.getElementById('equity-output').innerText = equity.toFixed(2) + "%";
-        document.getElementById('result-box').style.display = "block";
-    }
-</script>
-</body>
-</html>
+        <div class="menu-item" data-cat="chips">
+            <div class="item-info">
+                <div class="item-title">Fish &amp; Chips</div>
+                <div class="item-desc">Μπακαλιάρος πανέ με πατάτες τηγανητές &amp; σως DORY</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <span class="item-price">10,00€</span>
+                <button class="add-btn" onclick="addToCart('Fish &amp; Chips', 10.00)">+</button>
+            </div>
+        </div>
+
+        <!-- Seafood Pasta Category -->
+        <div class="menu-item" data-cat="pasta">
+            <div class="item-info">
+                <div class="item-title">Μακαρονάδα του Ψαρά</div>
