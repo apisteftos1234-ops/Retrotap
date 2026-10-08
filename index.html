@@ -3,62 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SnapToPost - Start 7-Day Free Trial</title>
+  <title>SnapToPost Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased">
 
-  <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
+  <div class="flex h-screen overflow-hidden">
     
-    <!-- Top Glow Accent -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500"></div>
-
-    <!-- Header -->
-    <div class="text-center space-y-2">
-      <div class="inline-flex items-center space-x-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-semibold">
-        <span>🎉 7-Day Free Trial • No Credit Card Required</span>
-      </div>
-      <h2 class="text-2xl font-extrabold text-white">Create Your Account</h2>
-      <p class="text-xs text-slate-400">Get your direct menu/booking web app & 10 AI posts in 90 seconds.</p>
-    </div>
-
-    <!-- Trial Registration Form -->
-    <form class="space-y-4">
-      
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between">
       <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
-        <input type="text" placeholder="Γιώργος Παπαδόπουλος" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <!-- Logo -->
+        <div class="p-5 border-b border-slate-800 flex items-center space-x-3">
+          <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white text-xl">S</div>
+          <div>
+            <h1 class="font-bold text-lg tracking-wide text-white">SnapTo<span class="text-indigo-400">Post</span></h1>
+            <p class="text-xs text-slate-400">Business Control Panel</p>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="p-4 space-y-1 text-sm font-medium">
+          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
+            <span>📊</span> <span>Επισκόπηση (Overview)</span>
+          </a>
+          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+            <span>🍕</span> <span>Μενού & Κατάλογος</span>
+          </a>
+          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition justify-between">
+            <div class="flex items-center space-x-3">
+              <span>📸</span> <span>Blitz Mode (AI Posts)</span>
+            </div>
+            <span class="bg-indigo-500/20 text-indigo-300 text-[10px] font-bold px-2 py-0.5 rounded-full">10 New</span>
+          </a>
+          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+            <span>🛵</span> <span>Παραγγελίες (Live)</span>
+          </a>
+          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+            <span>📅</span> <span>Κρατήσεις & Ραντεβού</span>
+          </a>
+          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+            <span>🛒</span> <span>Εξοπλισμός & Partners</span>
+          </a>
+        </nav>
       </div>
 
-      <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1">Work Email</label>
-        <input type="email" placeholder="info@gefsitaverna.gr" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
-      </div>
-
-      <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1">Mobile Phone Number (for WhatsApp Alerts)</label>
-        <input type="tel" placeholder="691 234 5678" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
-      </div>
-
-      <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1">Business Name & Subdomain</label>
-        <div class="flex items-center bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm">
-          <input type="text" placeholder="gefsi" class="bg-transparent w-full text-white focus:outline-none font-mono text-sm">
-          <span class="text-xs text-indigo-400 font-mono">.snaptopost.com</span>
+      <!-- Account / Subdomain Status -->
+      <div class="p-4 border-t border-slate-800 bg-slate-900/50">
+        <div class="flex items-center space-x-3">
+          <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
+          <div class="overflow-hidden">
+            <p class="text-sm font-semibold text-white truncate">Η Γεύση</p>
+            <p class="text-xs text-indigo-400 truncate">gefsi.snaptopost.com</p>
+          </div>
         </div>
       </div>
+    </aside>
 
-      <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/30 text-sm">
-        🚀 Start Free Trial & Launch Staging Site →
-      </button>
-
-    </form>
-
-    <div class="text-center text-[11px] text-slate-500 pt-2 border-t border-slate-800/80">
-      By signing up, you agree to our Terms of Service. You can cancel anytime inside your admin dashboard.
-    </div>
-
-  </div>
-
-</body>
-</html>
+    <!-- MAIN PANEL -->
+    <main class="flex-1 overflow-y-auto bg-slate-950 p-8 space-y-6">
+      
+      <!-- Welcome Trial Banner -->
+      <div class="bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/30">
+            🎉
