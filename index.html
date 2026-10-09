@@ -1,70 +1,298 @@
+[
+  { "id": 1, "title": "Construction of the Parthenon", "year": -447, "category": "Ancient History", "image": "🏛️" },
+  { "id": 2, "title": "Fall of Constantinople", "year": 1453, "category": "Middle Ages", "image": "🏰" },
+  { "id": 3, "title": "Greek War of Independence", "year": 1821, "category": "Modern History", "image": "⚔️" },
+  { "id": 4, "title": "First Modern Olympic Games (Athens)", "year": 1896, "category": "Sports History", "image": "🥇" },
+  { "id": 5, "title": "Apollo 11 Moon Landing", "year": 1969, "category": "Space Exploration", "image": "🚀" },
+  { "id": 6, "title": "Invention of the Printing Press", "year": 1440, "category": "Inventions", "image": "📜" },
+  { "id": 7, "title": "Discovery of America by Columbus", "year": 1492, "category": "Exploration", "image": "⛵" }
+]
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SnapToPost Admin Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>GeoHistory - Timeline Challenge</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased">
+<body>
 
-  <div class="flex h-screen overflow-hidden">
+  <div class="game-container">
+    <!-- Header Controls & Metrics -->
+    <header class="game-header">
+      <div class="brand">🌍 GeoHistory</div>
+      <div class="stats">
+        <span id="hearts-display">❤️❤️❤️</span>
+        <span class="score-badge">Streak: <strong id="score">0</strong></span>
+      </div>
+    </header>
+
+    <!-- Active Card to Place -->
+    <section class="card-deck">
+      <p class="instruction">Drag the event card into its correct position in the timeline below:</p>
+      <div id="draw-card" class="event-card active-card" draggable="true">
+        <span class="card-icon" id="card-icon">❓</span>
+        <h3 id="card-title">Loading...</h3>
+        <span class="category-tag" id="card-category">General</span>
+      </div>
+    </section>
+
+    <!-- Interactive Drop Target Timeline -->
+    <section class="timeline-wrapper">
+      <div class="timeline" id="timeline">
+        <!-- Dynamic Drop Slots and Placed Event Cards rendered here via app.js -->
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+:root {
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --accent-color: #6366f1;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --text-main: #f8fafc;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-h-screen: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.game-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-b: 1px solid #334155;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.score-badge {
+  background: #334155;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.card-deck {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.instruction {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.event-card {
+  background: var(--card-bg);
+  border: 2px solid #334155;
+  border-radius: 16px;
+  padding: 20px;
+  width: 220px;
+  margin: 0 auto;
+  cursor: grab;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.event-card:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.category-tag {
+  font-size: 0.75rem;
+  color: #818cf8;
+  background: #312e81;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.timeline-wrapper {
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: max-content;
+  padding: 10px;
+}
+
+.drop-slot {
+  width: 50px;
+  height: 140px;
+  border: 2px dashed #475569;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.drop-slot.drag-over {
+  border-color: var(--accent-color);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.placed-card {
+  background: #09724a;
+  border-color: var(--success-color);
+  cursor: default;
+}
+
+.year-badge {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 800;
+  color: #34d399;
+}
+let eventsPool = [];
+let timelineEvents = [];
+let currentCard = null;
+let score = 0;
+let lives = 3;
+
+// Initialize Game Data
+async function initGame() {
+  try {
+    const res = await fetch('events.json');
+    eventsPool = await res.json();
     
-    <!-- SIDEBAR -->
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between">
-      <div>
-        <!-- Logo -->
-        <div class="p-5 border-b border-slate-800 flex items-center space-x-3">
-          <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white text-xl">S</div>
-          <div>
-            <h1 class="font-bold text-lg tracking-wide text-white">SnapTo<span class="text-indigo-400">Post</span></h1>
-            <p class="text-xs text-slate-400">Business Control Panel</p>
-          </div>
-        </div>
+    // Seed initial event on the timeline
+    const seedIndex = Math.floor(Math.random() * eventsPool.length);
+    timelineEvents.push(eventsPool.splice(seedIndex, 1)[0]);
+    
+    drawNextCard();
+    renderTimeline();
+  } catch (err) {
+    console.error("Failed loading event database:", err);
+  }
+}
 
-        <!-- Navigation Links -->
-        <nav class="p-4 space-y-1 text-sm font-medium">
-          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
-            <span>📊</span> <span>Επισκόπηση (Overview)</span>
-          </a>
-          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-            <span>🍕</span> <span>Μενού & Κατάλογος</span>
-          </a>
-          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition justify-between">
-            <div class="flex items-center space-x-3">
-              <span>📸</span> <span>Blitz Mode (AI Posts)</span>
-            </div>
-            <span class="bg-indigo-500/20 text-indigo-300 text-[10px] font-bold px-2 py-0.5 rounded-full">10 New</span>
-          </a>
-          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-            <span>🛵</span> <span>Παραγγελίες (Live)</span>
-          </a>
-          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-            <span>📅</span> <span>Κρατήσεις & Ραντεβού</span>
-          </a>
-          <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-            <span>🛒</span> <span>Εξοπλισμός & Partners</span>
-          </a>
-        </nav>
-      </div>
+function drawNextCard() {
+  if (eventsPool.length === 0 || lives <= 0) {
+    alert(`Game Over! Final Streak: ${score}`);
+    return;
+  }
 
-      <!-- Account / Subdomain Status -->
-      <div class="p-4 border-t border-slate-800 bg-slate-900/50">
-        <div class="flex items-center space-x-3">
-          <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
-          <div class="overflow-hidden">
-            <p class="text-sm font-semibold text-white truncate">Η Γεύση</p>
-            <p class="text-xs text-indigo-400 truncate">gefsi.snaptopost.com</p>
-          </div>
-        </div>
-      </div>
-    </aside>
+  const randomIndex = Math.floor(Math.random() * eventsPool.length);
+  currentCard = eventsPool.splice(randomIndex, 1)[0];
 
-    <!-- MAIN PANEL -->
-    <main class="flex-1 overflow-y-auto bg-slate-950 p-8 space-y-6">
-      
-      <!-- Welcome Trial Banner -->
-      <div class="bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 space-y-3">
-        <div class="flex justify-between items-center">
-          <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/30">
-            🎉
+  document.getElementById('card-title').innerText = currentCard.title;
+  document.getElementById('card-icon').innerText = currentCard.image;
+  document.getElementById('card-category').innerText = currentCard.category;
+}
+
+function renderTimeline() {
+  const timelineEl = document.getElementById('timeline');
+  timelineEl.innerHTML = '';
+
+  for (let i = 0; i <= timelineEvents.length; i++) {
+    // Render Drop Slot
+    const slot = document.createElement('div');
+    slot.className = 'drop-slot';
+    slot.innerText = '+';
+    slot.dataset.index = i;
+    
+    slot.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      slot.classList.add('drag-over');
+    });
+
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    
+    slot.addEventListener('drop', (e) => handleDrop(e, i));
+    timelineEl.appendChild(slot);
+
+    // Render Placed Card
+    if (i < timelineEvents.length) {
+      const card = timelineEvents[i];
+      const cardEl = document.createElement('div');
+      cardEl.className = 'event-card placed-card';
+      cardEl.innerHTML = `
+        <span class="card-icon">${card.image}</span>
+        <h4>${card.title}</h4>
+        <span class="year-badge">${card.year < 0 ? Math.abs(card.year) + ' BCE' : card.year}</span>
+      `;
+      timelineEl.appendChild(cardEl);
+    }
+  }
+}
+
+function handleDrop(e, insertIndex) {
+  e.preventDefault();
+
+  // Validate Placement Chronology
+  const prevEvent = timelineEvents[insertIndex - 1];
+  const nextEvent = timelineEvents[insertIndex];
+
+  const afterPrev = !prevEvent || currentCard.year >= prevEvent.year;
+  const beforeNext = !nextEvent || currentCard.year <= nextEvent.year;
+
+  if (afterPrev && beforeNext) {
+    // Correct Placement
+    timelineEvents.splice(insertIndex, 0, currentCard);
+    score++;
+    document.getElementById('score').innerText = score;
+  } else {
+    // Wrong Placement
+    lives--;
+    updateHearts();
+    alert(`Incorrect! ${currentCard.title} occurred in year${currentCard.year}.`);
+  }
+
+  drawNextCard();
+  renderTimeline();
+}
+
+function updateHearts() {
+  document.getElementById('hearts-display').innerText = '❤️'.repeat(lives);
+}
+
+// Enable Drag Event on Active Card
+document.getElementById('draw-card').addEventListener('dragstart', (e) => {
+  e.dataTransfer.setData('text/plain', JSON.stringify(currentCard));
+});
+
+initGame();
