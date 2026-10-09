@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoHistory - Timeline Challenge</title>
+    <title>SquareDash - Arcade Runner</title>
     <style>
-        /* 🌌 Premium Dark Cyber Styling Matrix */
+        /* 🌌 Neon Cyber Arcade Aesthetics */
         :root {
-            --bg-dark: #0f111a;
-            --card-bg: #1e2235;
+            --bg-dark: #0a0c14;
             --accent-neon: #00ffcc;
+            --player-color: #ff007f;
+            --spike-color: #ff3333;
+            --floor-color: #1a1f35;
             --text-light: #f0f4f8;
-            --text-muted: #8fa0dd;
-            --border-glow: #2f3756;
-            --correct-green: #39ff14;
+            --border-glow: #242943;
         }
 
         body {
@@ -21,192 +21,71 @@
             color: var(--text-light);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden;
+            user-select: none;
         }
 
-        .game-container {
-            width: 100%;
-            max-width: 900px;
-            background: linear-gradient(145deg, #131722, #1a1f30);
-            border: 1px solid var(--border-glow);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-glow);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-
-        .brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--accent-neon);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .stats {
-            display: flex;
-            gap: 20px;
-            font-size: 16px;
-        }
-
-        .hearts-display {
-            color: #ff3366;
-            font-size: 20px;
-            letter-spacing: 3px;
-        }
-
-        .score-badge {
-            color: var(--text-muted);
-        }
-
-        .score-badge strong {
-            color: var(--accent-neon);
-        }
-
-        .card-deck {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
-            background: rgba(255,255,255,0.02);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px dashed var(--border-glow);
-        }
-
-        .instruction {
-            color: var(--text-muted);
-            margin: 0 0 15px 0;
-            font-size: 14px;
-        }
-
-        /* 🃏 Active Card Design Layout */
-        .historical-card {
-            background-color: var(--card-bg);
-            border: 2px solid var(--accent-neon);
-            border-radius: 12px;
-            padding: 20px;
-            width: 280px;
+        .game-wrapper {
             text-align: center;
-            cursor: grab;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
-            transition: transform 0.2s;
-        }
-
-        .historical-card:active {
-            cursor: grabbing;
-            transform: scale(0.98);
-        }
-
-        .card-emoji {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin: 5px 0;
-        }
-
-        .card-category {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            background: rgba(255,255,255,0.05);
-            padding: 3px 8px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        /* 📍 Timeline Track & Drop Slots */
-        .timeline-track {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
             position: relative;
-            padding: 10px 0;
         }
 
-        .timeline-slot {
-            height: 25px;
-            background: rgba(0, 255, 204, 0.03);
-            border: 1px dashed rgba(0, 255, 204, 0.2);
-            border-radius: 6px;
-            transition: all 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: rgba(0, 255, 204, 0.4);
-            font-size: 12px;
-        }
-
-        .timeline-slot.drag-over {
-            background: rgba(0, 255, 204, 0.15);
-            border: 1px solid var(--accent-neon);
-            height: 40px;
-        }
-
-        .placed-card {
-            background: linear-gradient(135deg, #1b1f32, #242943);
-            border: 1px solid var(--border-glow);
-            border-radius: 8px;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .placed-card.new-correct {
-            border-color: var(--correct-green);
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
-        }
-
-        .placed-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .placed-year {
-            font-size: 16px;
-            font-weight: bold;
+        h1 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
             color: var(--accent-neon);
-            background: rgba(0, 255, 204, 0.08);
-            padding: 4px 10px;
-            border-radius: 6px;
-            min-width: 70px;
-            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+        }
+
+        .controls-hint {
+            color: #8fa0dd;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* 🎮 The Game Viewport Canvas */
+        canvas {
+            background-color: #111424;
+            border: 2px solid var(--border-glow);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            cursor: pointer;
+            display: block;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-light);
+            pointer-events: none;
         }
 
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(10, 12, 20, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
+            opacity: 1;
+            transition: opacity 0.2s ease;
         }
 
-        .modal-overlay.active {
-            opacity: 1; pointer-events: auto;
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .modal-card {
@@ -215,208 +94,291 @@
             padding: 40px;
             border-radius: 16px;
             text-align: center;
-            max-width: 400px;
+            max-width: 360px;
             width: 100%;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
         }
 
         .modal-btn {
             background: var(--accent-neon);
             color: var(--bg-dark);
             border: none;
-            padding: 12px 30px;
+            padding: 12px 35px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 25px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0, 255, 204, 0.3);
+            transition: transform 0.1s;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .modal-btn:active {
+            transform: scale(0.97);
         }
     </style>
 </head>
 <body>
 
-    <div class="game-container">
-        <!-- Header Controls & Metrics -->
-        <header class="game-header">
-            <div class="brand">GeoHistory</div>
-            <div class="stats">
-                <span id="hearts-display" class="hearts-display">♥♥♥</span>
-                <span class="score-badge">Streak: <strong id="score">0</strong></span>
-            </div>
-        </header>
-
-        <!-- Active Card to Place -->
-        <section class="card-deck">
-            <p class="instruction">Drag the event card into its correct historical position below:</p>
-            <div id="deck-slot">
-                <!-- Spawns dynamically via JS -->
-            </div>
-        </section>
-
-        <!-- Chronological Timeline Stack -->
-        <section id="timeline" class="timeline-track">
-            <!-- Interleaved drop slots and cards spawn dynamically -->
-        </section>
+    <div class="game-wrapper">
+        <h1>SquareDash</h1>
+        <div class="controls-hint">Press <strong>SPACEBAR</strong>, <strong>UP ARROW</strong>, or <strong>CLICK CANVAS</strong> to Jump</div>
+        
+        <div id="ui-score" class="ui-overlay">Score: 0</div>
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
     </div>
 
-    <!-- Game Status End Modal -->
-    <div id="end-modal" class="modal-overlay">
+    <!-- Start / Game Over Modal Screen Overlay -->
+    <div id="menuModal" class="modal-overlay">
         <div class="modal-card">
-            <h2 id="modal-title" style="color: var(--accent-neon);">GAME OVER</h2>
-            <p id="modal-desc" style="color: var(--text-muted);"></p>
-            <button class="modal-btn" onclick="resetGame()">Try Again</button>
+            <h2 id="modalTitle" style="color: var(--accent-neon); margin: 0 0 10px 0; letter-spacing: 2px;">SQUARE DASH</h2>
+            <p id="modalDesc" style="color: #8fa0dd; margin: 0; font-size: 15px;">Jump over incoming spikes to survive.</p>
+            <button id="actionBtn" class="modal-btn" onclick="startGame()">Start Game</button>
         </div>
     </div>
 
-    <script>
-        // 🗃️ Master Local Database Array from your Repository Image Schema
-        const dataset = [
-            { id: 1, title: "Construction of the Parthenon", year: -447, category: "Ancient History", image: "🏛️" },
-            { id: 2, title: "Fall of Constantinople", year: 1453, category: "Middle Ages", image: "🏰" },
-            { id: 3, title: "Greek War of Independence", year: 1821, category: "Modern History", image: "⚔️" },
-            { id: 4, title: "First Modern Olympic Games (Athens)", year: 1896, category: "Sports History", image: "🏆" },
-            { id: 5, title: "Apollo 11 Moon Landing", year: 1969, category: "Space Exploration", image: "🚀" },
-            { id: 6, title: "Invention of the Printing Press", year: 1440, category: "Inventions", image: "🖨️" },
-            { id: 7, title: "Discovery of America by Columbus", year: 1492, category: "Exploration", image: "⛵" }
-        ];
+    <!-- Linked Client Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-        // Engine State Parameters
-        let remainingCards = [];
-        let placedCards = [];
-        let activeCard = null;
-        let lives = 3;
-        let score = 0;
+// Physics Parameter Constants
+const GRAVITY = 1.6;
+const JUMP_FORCE = -18;
+const GAME_SPEED_START = 8;
+const SPEED_INCREMENT = 0.001;
+const FLOOR_Y = 320;
 
-        function initGame() {
-            remainingCards = [...dataset];
-            placedCards = [];
-            lives = 3;
-            score = 0;
-            
-            // On startup, choose one random seed card to anchors the timeline structure
-            const seedIndex = Math.floor(Math.random() * remainingCards.length);
-            placedCards.push(remainingCards.splice(seedIndex, 1)[0]);
-            
-            updateMetrics();
-            spawnNextCard();
-            renderTimeline();
+// Engine State Variables
+let isPlaying = false;
+let score = 0;
+let gameSpeed = GAME_SPEED_START;
+let obstacles = [];
+let spawnTimer = 0;
+
+// 🟥 Player Properties
+const player = {
+    x: 100,
+    y: FLOOR_Y - 40,
+    width: 40,
+    height: 40,
+    velocityY: 0,
+    isGrounded: true,
+    rotation: 0, // Visual flip trick matching original mechanics
+    
+    jump() {
+        if (this.isGrounded) {
+            this.velocityY = JUMP_FORCE;
+            this.isGrounded = false;
+        }
+    },
+    
+    update() {
+        // Apply Gravity Acceleration
+        this.velocityY += GRAVITY;
+        this.y += this.velocityY;
+
+        // Collision Check against Solid Ground line
+        if (this.y >= FLOOR_Y - this.height) {
+            this.y = FLOOR_Y - this.height;
+            this.velocityY = 0;
+            this.isGrounded = true;
+            // Snap visual rotation smoothly back to nearest 90-deg angle grid
+            this.rotation = Math.round(this.rotation / 90) * 90;
+        } else {
+            // Continuous aerial rotational velocity while jumping
+            this.rotation += 4.5;
+        }
+    },
+
+    draw() {
+        ctx.save();
+        // Move structural processing point to core of player square container
+        ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+        ctx.rotate((this.rotation * Math.PI) / 180);
+        
+        // Draw Neon Player Body Block
+        ctx.fillStyle = '#ff007f';
+        ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+        
+        // Draw Inner Visual Detail Core Mask
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-this.width / 2.7, -this.height / 2.7, this.width / 1.35, this.height / 1.35);
+
+        ctx.restore();
+    }
+};
+
+// 📍 Obstacle Management Logic Loops
+function spawnObstacle() {
+    // Randomly select between a Single Spike object or a Double Spike obstacle block
+    const typeRand = Math.random();
+    const obstacleWidth = typeRand > 0.6 ? 60 : 30; // Double vs Single layout metrics
+    
+    obstacles.push({
+        x: canvas.width + 50,
+        y: FLOOR_Y,
+        width: obstacleWidth,
+        height: 38,
+        passed: false
+    });
+}
+
+function updateObstacles() {
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+        const obs = obstacles[i];
+        obs.x -= gameSpeed;
+
+        // Increment score check tracking parameters
+        if (!obs.passed && obs.x + obs.width < player.x) {
+            obs.passed = true;
+            score++;
+            document.getElementById('ui-score').innerText = `Score: ${score}`;
         }
 
-        function updateMetrics() {
-            document.getElementById('score').innerText = score;
-            document.getElementById('hearts-display').innerText = '♥'.repeat(lives) + '♡'.repeat(3 - lives);
+        // Delete items drifting past boundary cutoff matrix lines to save execution memory
+        if (obs.x + obs.width < -50) {
+            obstacles.splice(i, 1);
+            continue;
         }
 
-        function spawnNextCard() {
-            const deckSlot = document.getElementById('deck-slot');
-            deckSlot.innerHTML = '';
+        // Strict AABB Collision Box Checking Mechanics
+        if (
+            player.x < obs.x + obs.width &&
+            player.x + player.width > obs.x &&
+            player.y < obs.y &&
+            player.y + player.height > obs.y - obs.height
+        ) {
+            triggerGameOver();
+        }
+    }
+}
 
-            if (remainingCards.length === 0) {
-                triggerEndGame(true);
-                return;
-            }
+function drawObstacles() {
+    for (const obs of obstacles) {
+        ctx.fillStyle = '#ff3333';
+        
+        // Render custom triangular polygon spikes shapes onto canvas space arrays
+        ctx.beginPath();
+        if (obs.width === 30) {
+            // Single Spike Structure Layout
+            ctx.moveTo(obs.x, obs.y);
+            ctx.lineTo(obs.x + 15, obs.y - obs.height);
+            ctx.lineTo(obs.x + 30, obs.y);
+        } else {
+            // Linked Double Spike Variant Structure Layout
+            ctx.moveTo(obs.x, obs.y);
+            ctx.lineTo(obs.x + 15, obs.y - obs.height);
+            ctx.lineTo(obs.x + 30, obs.y);
+            ctx.lineTo(obs.x + 45, obs.y - obs.height);
+            ctx.lineTo(obs.x + 60, obs.y);
+        }
+        ctx.closePath();
+        ctx.fill();
+        
+        // Soft Neon Silhouette Outlines Glow
+        ctx.strokeStyle = 'rgba(255, 51, 51, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+}
 
-const randIndex = Math.floor(Math.random() * remainingCards.length);
-activeCard = remainingCards.splice(randIndex, 1)[0];
-const cardEl = document.createElement('div');
-cardEl.className = 'historical-card';
-cardEl.draggable = true;
-cardEl.innerHTML = <div class="card-emoji">${activeCard.image}</div> <div class="card-title">${activeCard.title}</div> <div class="card-category">${activeCard.category}</div>;
-cardEl.addEventListener('dragstart', (e) => {
-e.dataTransfer.setData('text/plain', activeCard.id);
-});
-deckSlot.appendChild(cardEl);
+function drawEnvironment() {
+    // Render Background Horizontal Grid Layout Matrices Lines
+    ctx.strokeStyle = 'rgba(36, 41, 67, 0.3)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < canvas.height; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(canvas.width, i);
+        ctx.stroke();
+    }
+
+    // Draw Neon Floor Bed Base Block
+    ctx.fillStyle = '#1a1f35';
+    ctx.fillRect(0, FLOOR_Y, canvas.width, canvas.height - FLOOR_Y);
+
+    // Draw Vector Accent Ceiling/Floor Divider Line
+    ctx.fillStyle = '#00ffcc';
+    ctx.fillRect(0, FLOOR_Y, canvas.width, 3);
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#00ffcc';
+    // Instantly clear memory shadow settings parameters following paint configurations
+    ctx.shadowBlur = 0; 
 }
-function renderTimeline() {
-const timeline = document.getElementById('timeline');
-timeline.innerHTML = '';
-// Generate dropslots preceding and interleaved between all sorted historical elements
-for (let i = 0; i <= placedCards.length; i++) {
-const slot = document.createElement('div');
-slot.className = 'timeline-slot';
-slot.dataset.index = i;
-slot.innerText = "DROP CARD HERE";
-slot.addEventListener('dragover', (e) => {
-e.preventDefault();
-slot.classList.add('drag-over');
-});
-slot.addEventListener('dragleave', () => {
-slot.classList.remove('drag-over');
-});
-slot.addEventListener('drop', (e) => {
-e.preventDefault();
-slot.classList.remove('drag-over');
-handleCardDrop(parseInt(slot.dataset.index));
-});
-timeline.appendChild(slot);
-// Render the chronological item blocks
-if (i < placedCards.length) {
-const item = placedCards[i];
-const itemEl = document.createElement('div');
-itemEl.className = placed-card ${item.id === (activeCard?.idLastCorrect || null) ? 'new-correct' : ''};
-const formatYear = item.year < 0 ? ${Math.abs(item.year)} BC : ${item.year} AD;
-itemEl.innerHTML = <div class="placed-info"> <span style="font-size: 20px;">${item.image}</span> <span style="font-weight: 500;">${item.title}</span> </div> <div class="placed-year">${formatYear}</div>;
-timeline.appendChild(itemEl);
+
+// 🔄 Principal Master Game Frame Tick Render Engine
+function gameLoop() {
+    if (!isPlaying) return;
+
+    // Clear absolute canvas parameters frame rows
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Accelerate speed dynamically over runtime frames logic variables
+    gameSpeed += SPEED_INCREMENT;
+
+    // Manage dynamic rhythmic obstacle spawner frequency parameters
+    spawnTimer += gameSpeed;
+    if (spawnTimer > 320 + Math.random() * 150) {
+        spawnObstacle();
+        spawnTimer = 0;
+    }
+
+    // Update Engine State Variables Arrays
+    player.update();
+    updateObstacles();
+
+    // Render Viewport Components Screen Containers
+    drawEnvironment();
+    drawObstacles();
+    player.draw();
+
+    // Request continuous frame steps recursive loops execution calls
+    requestAnimationFrame(gameLoop);
 }
+
+// 🕹️ Input Handlers & Verification Triggers Connection Setup
+function handleAction(e) {
+    if (e.type === 'keydown' && e.code !== 'Space' && e.code !== 'ArrowUp') return;
+    if (e.cancelable) e.preventDefault(); // Suppress mobile scroll latency ticks
+    
+    if (isPlaying) {
+        player.jump();
+    }
 }
+
+window.addEventListener('keydown', handleAction);
+canvas.addEventListener('touchstart', handleAction, { passive: false });
+canvas.addEventListener('mousedown', handleAction);
+
+function startGame() {
+    document.getElementById('menuModal').classList.add('hidden');
+    
+    // Re-initialize core game attributes states loop trackers
+    obstacles = [];
+    score = 0;
+    gameSpeed = GAME_SPEED_START;
+    spawnTimer = 0;
+    player.y = FLOOR_Y - player.height;
+    player.velocityY = 0;
+    player.rotation = 0;
+    player.isGrounded = true;
+    document.getElementById('ui-score').innerText = `Score: ${score}`;
+    
+    isPlaying = true;
+    gameLoop();
 }
-function handleCardDrop(dropIndex) {
-if (!activeCard) return;
-// Mathematical verification check: construct hypothetical timeline matrix
-const testTimeline = [...placedCards];
-testTimeline.splice(dropIndex, 0, activeCard);
-// Verify if array sorting order matches strict linear chronological timeline flow
-let isCorrect = true;
-for (let i = 0; i < testTimeline.length - 1; i++) {
-if (testTimeline[i].year > testTimeline[i + 1].year) {
-isCorrect = false;
-break;
+
+function triggerGameOver() {
+    isPlaying = false;
+    document.getElementById('menuModal').classList.remove('hidden');
+    document.getElementById('modalTitle').innerText = "💀 CRASHED";
+    document.getElementById('modalTitle').style.color = "#ff3333";
+    document.getElementById('modalDesc').innerText = `Your cube collided with a vector spike block! Final accuracy runtime score: ${score} points.`;
+    document.getElementById('actionBtn').innerText = "Respawn Cube";
 }
-}
-if (isCorrect) {
-score++;
-activeCard.idLastCorrect = activeCard.id; // Highlight on UI track
-placedCards.splice(dropIndex, 0, activeCard);
-updateMetrics();
-spawnNextCard();
-renderTimeline();
-} else {
-lives--;
-updateMetrics();
-if (lives <= 0) {
-triggerEndGame(false);
-} else {
-alert(❌ Incorrect Position! The event did not happen at that period. Lose 1 life.);
-// Return card loop buffer back into deck sequence pool
-remainingCards.push(activeCard);
-spawnNextCard();
-renderTimeline();
-}
-}
-}
-function triggerEndGame(hasWon) {
-const modal = document.getElementById('end-modal');
-const title = document.getElementById('modal-title');
-const desc = document.getElementById('modal-desc');
-if (hasWon) {
-title.innerText = "👑 VICTORY!";
-title.style.color = "var(--correct-green)";
-desc.innerText = Sensational history tracking skill! You perfectly mapped every timeline anomaly with a clean streak score of: ${score}.;
-} else {
-title.innerText = "💀 GAME OVER";
-title.style.color = "#ff3366";
-desc.innerText = You ran out of historical lifeline tracks. Your final timeline accuracy streak was: ${score} points.;
-}
-modal.classList.add('active');
-}
-function resetGame() {
-document.getElementById('end-modal').classList.remove('active');
-initGame();
-}
-// Auto initialization call on runtime loads
-window.onload = initGame;
